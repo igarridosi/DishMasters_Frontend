@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import "leaflet/dist/leaflet.css";
+
 import "./style.css";
 
 const Spots = () => {
