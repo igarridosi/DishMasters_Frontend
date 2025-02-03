@@ -110,10 +110,10 @@ const SidebarDesktop = ({ setShowForm }) => {
             </button>
             {openSubmenu === 'dishylist' && (
               <ul className="ml-4 mt-2">
-                <li><a href="/tasteTrends" className="block p-2 hover:bg-gray-200 rounded no-underline text-black">{t('taste_trends')}</a></li>
-                <li><a href="/seasonRecepies" className="block p-2 hover:bg-gray-200 rounded no-underline text-black">{t('season_recipes')}</a></li>
+                <li><a href="#" className="block p-2 hover:bg-gray-200 rounded no-underline text-black">{t('taste_trends')}</a></li>
+                <li><a href="seasonRecipes.html" className="block p-2 hover:bg-gray-200 rounded no-underline text-black">{t('season_recipes')}</a></li>
                 <li><a href="/spots" className="block p-2 hover:bg-gray-200 rounded no-underline text-black">{t('food_spots')}</a></li>
-                <li><a href="/worldDishes" className="block p-2 hover:bg-gray-200 rounded no-underline text-black">{t('world_dishes')}</a></li>
+                <li><a href="#" className="block p-2 hover:bg-gray-200 rounded no-underline text-black">{t('world_dishes')}</a></li>
               </ul>
             )}
           </li>
@@ -191,7 +191,7 @@ const SidebarDesktop = ({ setShowForm }) => {
         </div>
         {isAdmin && (
           <button
-            className=" w-[7rem] flex px-3 py-2 overflow-hidden font-medium text-black transition duration-300 ease-out border-2 border-[#222222] hover:border-gray-700 rounded-lg shadow-md items-center justify-center p-2 rounded-full hover:bg-gray-200 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 origin-to motion-delay-[2250ms] motion-scale-in-0 motion-opacity-in-0"
+            className=" w-[7rem] flex px-3 py-2 overflow-hidden font-medium text-black transition duration-300 ease-out border-2 border-[#222222] hover:border-gray-700 rounded-lg shadow-md items-center justify-center p-2 hover:bg-gray-2000 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 origin-to motion-delay-[2250ms] motion-scale-in-0 motion-opacity-in-0"
             aria-label="User Panel"
             onClick={userPanel}
           >
