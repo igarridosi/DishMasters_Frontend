@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
+import { useStateContext } from "../../contexts/contextProvider";
 
 const CommentPopup = ({ show, onClose, onSubmit }) => {
   const [username, setUsername] = useState('');
   const [text, setText] = useState('');
-
+  const { user } = useStateContext();
 
   const handleInputChange = (e) => {
     setUsername(e.target.value);
@@ -28,10 +29,10 @@ const CommentPopup = ({ show, onClose, onSubmit }) => {
         <form onSubmit={handleSubmit} className='flex flex-col '>
           <input
             type="text"
-            value={username}
+            value={user.name}
             onChange={handleInputChange}
-            placeholder="Username"
             className='mb-2 w-full rounded'
+            readonly
           />
           <textarea
             value={text}

@@ -3,12 +3,14 @@ import { useState, useEffect } from 'react';
 import DishComment from './DishComments'
 import CommentPopup from './CommentPopup'
 
-const Dishcussing = ({ id, title, content, user, datetime, tag, likes, comments }) => {
-  var [likes, setLikes] = useState(likes);
+const Dishcussing = ({ id, title, content, user, datetime, tag, likesJSON, comments }) => {
+  const [liked, setLiked] = useState(false);
+  const [likes, setLikes] = useState(likesJSON);
   var [comments, setComments] = useState(comments);
   const [showPopup, setShowPopup] = useState(false);
   const [dishcommenting, setDishComments] = useState([]);
   const [dateComment, setDateComment] = useState('');
+  const [isHidden, setIsHidden] = useState(false);
 
 
   const togglePopup = () => {
@@ -19,6 +21,7 @@ const Dishcussing = ({ id, title, content, user, datetime, tag, likes, comments 
     updateComments(username, theText)
     setShowPopup(false);
   };
+
   useEffect(() => {
     const fetchDishComments = async () => {
       try {
@@ -37,23 +40,42 @@ const Dishcussing = ({ id, title, content, user, datetime, tag, likes, comments 
     fetchDishComments();
   }, []);
 
+  const deleting = async () => {
 
+    if (confirm("Are you sure you want to delete the Post?")) {
+      setIsHidden(true);
+      try {
+        await fetch('http://localhost:8000/api/dishcuss/deletePost', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ id }),
+        });
+      } catch (error) {
+        console.error('Error killing post:', error);
+      }
+    }
 
+  };
 
   const updateLikes = async () => {
-    setLikes(likes + 1)
+    const newLikes = liked ? likes - 1 : likes + 1;
+    setLiked(!liked);
+    setLikes(newLikes);
     try {
       await fetch('http://localhost:8000/api/dishcuss/updateDishcussing', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ id, likes: likes + 1 }),
+        body: JSON.stringify({ id, likes: newLikes }),
       });
     } catch (error) {
       console.error('Error updating likes:', error);
     }
   };
+
   const updateComments = async (username, theText) => {
     setComments(comments + 1)
     if (username && theText) {
@@ -100,7 +122,7 @@ const Dishcussing = ({ id, title, content, user, datetime, tag, likes, comments 
   };
 
   return (
-    <div className="hover:animate-background rounded-xl bg-gradient-to-r from-DishColor via-orange-300 to-yellow-700 p-0.5 shadow-xl transition  p-1 flex flex-col justify-between max-w-[20rem] h-25 mt-3 mb-5">
+    <div className="hover:animate-background rounded-xl bg-gradient-to-r from-DishColor via-orange-300 to-orange-300 shadow-xl transition p-1 flex flex-col justify-between max-w-[25rem] h-25 mt-3 mb-5" style={{ display: isHidden ? 'none' : 'block' }}>
       <div className=" size-full rounded flex flex-col h-full p-3">
         <div className="flex justify-between ml-1 mr-1">
           <h4 className="text-base mb-2 font-bold">{user}</h4>
@@ -112,12 +134,25 @@ const Dishcussing = ({ id, title, content, user, datetime, tag, likes, comments 
         </div>
         <h2 className="text-2xl mb-10 mt-1 font-bold">{title}</h2>
         <p className='break-words'>{content}</p>
-        <div className="mt-auto pt-6 flex text-2xl font-bold">
-          <img src="/img/comment.svg" className="size-8 mr-4" onClick={() => togglePopup()} />
-          <p>{comments}</p>
+        <div className="mt-auto pt-6 flex text-2xl font-bold justify-between">
+          <div className='flex flex-row'>
+            <img src="/img/comment.svg" className="size-8 mr-4" onClick={() => togglePopup()} />
+            <p>{comments}</p>
+          </div>
           <CommentPopup show={showPopup} onClose={togglePopup} onSubmit={handleSubmit} />
-          <p className='pl-3' onClick={() => updateLikes()}>♥ {likes}</p>
+          <div className='flex flex-row items-center'>
+            <button
+              onClick={updateLikes}
+              className={`p-2 rounded-full transition-colors duration-300 
+                ${liked ? "bg-red-100 text-red-500" : "bg-gray-100 text-gray-500"}`}
+            >
+              {liked ? "❤️" : "🤍"}
+            </button>
+            <p className='ml-4'>{likes}</p>
+          </div>
+          <img src="img/trash.svg" className="size-8 mr-4" onClick={() => deleting()} />
         </div>
+
       </div>
       <div className='overflow-y-auto max-h-64'>
         {dishcommenting.map((dishcussion, index) => {

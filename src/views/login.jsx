@@ -16,7 +16,7 @@ export default function Login() {
             email: emailRef.current.value,
             password: passwordRef.current.value,
         }
-        console.log("Payload being sent:", payload); // Log the payload before sending
+        //console.log("Payload being sent:", payload); // Log the payload before sending
 
         axiosClient.post("/login", payload).then(({ data }) => {
             setUser(data.user);

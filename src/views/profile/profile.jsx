@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 
 
 export default function ProfileSettings() {
-  const [user, setUser] = useState({ name: '', email: '', password: '', password_confirmation: '', profile_image: '' });
+  const [user, setUser] = useState({name: '', email: '', password: '', password_confirmation: '', profile_image: ''});
   const [loading, setLoading] = useState(false);
   const [alert, setAlert] = useState(null); // State for alert message
 
@@ -46,9 +46,8 @@ export default function ProfileSettings() {
           {/* Alert Message */}
           {alert && (
             <div
-              className={`p-3 mb-4 rounded ${
-                alert.type === 'success' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
-              }`}
+              className={`p-3 mb-4 rounded ${alert.type === 'success' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
+                }`}
             >
               {alert.message}
             </div>
@@ -104,10 +103,10 @@ export default function ProfileSettings() {
           </button>
         </form>
         <div className="md:col-span-1 flex-1 items-center">
-        <ProfileImageUpload userId={user.id} />
+          <ProfileImageUpload userId={user.id} />
         </div>
       </div>
-      
+
     </div>
   );
 }

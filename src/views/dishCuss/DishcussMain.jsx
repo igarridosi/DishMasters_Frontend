@@ -8,6 +8,7 @@ function App() {
   const [datetime, setDatetime] = useState('');
   const [tag, setTag] = useState('Question');
   const [dishcussings, setDishcussings] = useState([]);
+  const [image, setImage] = useState(null);
 
   useEffect(() => {
     const fetchDishcussings = async () => {

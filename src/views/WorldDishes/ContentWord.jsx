@@ -6,6 +6,59 @@ function ContentWorld() {
     const [countryFilter, setCountryFilter] = useState('');
     const [countries, setCountries] = useState([]);
 
+    // Obtener país por defecto basado en geolocalización
+    useEffect(() => {
+        const fetchCountry = async () => {
+            if ("geolocation" in navigator) {
+                navigator.geolocation.getCurrentPosition(
+                    async (position) => {
+                        const { latitude, longitude } = position.coords;
+                        try {
+                            const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`);
+                            const data = await response.json();
+                            if (data.address && data.address.country) {
+                                setCountryFilter(data.address.country);
+                            }
+                        } catch (error) {
+                            console.error("Error obteniendo país por coordenadas:", error);
+                        }
+                    },
+                    async () => {
+                        // Si no hay permiso de geolocalización, usar IP como alternativa
+                        try {
+                            const response = await fetch("https://ipapi.co/json/");
+                            const data = await response.json();
+                            if (data.country_name) {
+                                setCountryFilter(data.country_name);
+                            }
+                        } catch (error) {
+                            console.error("Error obteniendo país por IP:", error);
+                        }
+                    }
+                );
+            } else {
+                // Si no hay geolocalización disponible, usar IP
+                fetch("https://ipapi.co/json/")
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.country_name) {
+                            setCountryFilter(data.country_name);
+                        }
+                    })
+                    .catch(error => console.error("Error obteniendo país por IP:", error));
+            }
+        };
+
+        fetchCountry();
+    }, []);
+
+    useEffect(() => {
+        if (countryFilter) {
+            console.log("País detectado:", countryFilter);
+        }
+    }, [countryFilter]);
+
+
     useEffect(() => {
         fetch('./json/world.json')
             .then(response => response.json())
@@ -44,9 +97,9 @@ function ContentWorld() {
                     onChange={(e) => setCountryFilter(e.target.value)}
                     className="p-2 border rounded-md"
                 >
-                    <option value="">Choose a country</option>
+                    <option value="" className='font-sans'>Choose a country</option>
                     {countries.map((country, index) => (
-                        <option key={index} value={country}>
+                        <option key={index} value={country} className='font-sans'>
                             {country}
                         </option>
                     ))}
@@ -71,7 +124,7 @@ function ContentWorld() {
 
                             <button
                                 onClick={() => toggleIngredientsVisibility(index)}
-                                className="bg-DishColor text-white p-3 rounded-md hover:bg-dishColor-700 mb-4 font-bold "
+                                className="bg-dishColor text-white p-3 rounded-md hover:bg-dishColor-700 mb-4 font-bold "
                             >
                                 {dish.showIngredients ? 'Hide Ingredients' : 'Show Ingredients'}
                             </button>
