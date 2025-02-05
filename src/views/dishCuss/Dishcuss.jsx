@@ -3,9 +3,9 @@ import { useState, useEffect } from 'react';
 import DishComment from './DishComments'
 import CommentPopup from './CommentPopup'
 
-const Dishcussing = ({ id, title, content, user, datetime, tag, likesJSON, comments }) => {
+const Dishcussing = ({ id, title, content, user, datetime, tag, likes, comments }) => {
   const [liked, setLiked] = useState(false);
-  const [likes, setLikes] = useState(likesJSON);
+  const [likes, setLikes] = useState(likes);
   var [comments, setComments] = useState(comments);
   const [showPopup, setShowPopup] = useState(false);
   const [dishcommenting, setDishComments] = useState([]);
@@ -142,11 +142,11 @@ const Dishcussing = ({ id, title, content, user, datetime, tag, likesJSON, comme
           <CommentPopup show={showPopup} onClose={togglePopup} onSubmit={handleSubmit} />
           <div className='flex flex-row items-center'>
             <button
-              onClick={updateLikes}
+              onClick={() => updateLikes()}
               className={`p-2 rounded-full transition-colors duration-300 
                 ${liked ? "bg-red-100 text-red-500" : "bg-gray-100 text-gray-500"}`}
             >
-              {liked ? "❤️" : "🤍"}
+              {liked ? "❤️" : "🖤"}
             </button>
             <p className='ml-4'>{likes}</p>
           </div>
