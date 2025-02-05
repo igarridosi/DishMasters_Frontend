@@ -1,14 +1,14 @@
 import { useState, useEffect } from 'react';
 import Dishcussing from './Dishcuss';
+import { useStateContext } from "../../contexts/contextProvider";
 
 function App() {
   const [title, setTitle] = useState('');
   const [text, setText] = useState('');
-  const [user, setUser] = useState('');
+  const { user } = useStateContext();
   const [datetime, setDatetime] = useState('');
   const [tag, setTag] = useState('Question');
   const [dishcussings, setDishcussings] = useState([]);
-  const [image, setImage] = useState(null);
 
   useEffect(() => {
     const fetchDishcussings = async () => {
@@ -29,14 +29,16 @@ function App() {
   }, []);
 
   const clicked = async () => {
-    if (title && text && user && tag) {
+    if (title && text && user.name && tag) {
       const month = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
       var a = new Date();
       setDatetime(month[a.getMonth()] + " " + a.getDate() + " " + (a.getUTCHours() + 1) + ":" + a.getUTCMinutes());
 
       const idsToFind = dishcussings.map(look => look.id);
       const maxId = idsToFind.length > 0 ? Math.max(...idsToFind) : 0;
-      const newDishcussing = { id: maxId + 1, title, text, user, datetime, tag, likes: 0, comments: 0 };
+      var i = user.name;
+      console.log(i)
+      const newDishcussing = { id: maxId + 1, title, text, i, datetime, tag, likes: 0, comments: 0 };
       try {
         const response = await fetch('http://localhost:8000/api/dishcuss/saveDishcussing', {
           method: 'POST',
@@ -50,7 +52,6 @@ function App() {
           setDishcussings((prevState) => [...prevState, newDishcussing]);
           setTitle('');
           setText('');
-          setUser('');
         } else {
           alert('Error saving dishcussing');
         }
@@ -73,8 +74,7 @@ function App() {
           <div id="dishy" className="space-y-4">
             <input
               type="text"
-              placeholder="Username"
-              value={user}
+              value={user.name}
               onChange={(e) => setUser(e.target.value)}
               className="block w-full p-2 border border-gray-300 rounded"
             />

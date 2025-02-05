@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { useStateContext } from "../../contexts/contextProvider";
 
 const CommentPopup = ({ show, onClose, onSubmit }) => {
-  const [username, setUsername] = useState('');
   const [text, setText] = useState('');
   const { user } = useStateContext();
 
@@ -15,8 +14,7 @@ const CommentPopup = ({ show, onClose, onSubmit }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onSubmit(username, text);
-    setUsername('');
+    onSubmit(user.name, text);
     setText('');
   };
 
