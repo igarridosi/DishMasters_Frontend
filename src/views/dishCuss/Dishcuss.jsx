@@ -4,8 +4,7 @@ import DishComment from './DishComments'
 import CommentPopup from './CommentPopup'
 
 const Dishcussing = ({ id, title, content, user, datetime, tag, likes, comments }) => {
-  const [liked, setLiked] = useState(false);
-  const [likes, setLikes] = useState(likes);
+  var [likes, setLikes] = useState(likes);
   var [comments, setComments] = useState(comments);
   const [showPopup, setShowPopup] = useState(false);
   const [dishcommenting, setDishComments] = useState([]);
@@ -60,22 +59,19 @@ const Dishcussing = ({ id, title, content, user, datetime, tag, likes, comments 
   };
 
   const updateLikes = async () => {
-    const newLikes = liked ? likes - 1 : likes + 1;
-    setLiked(!liked);
-    setLikes(newLikes);
+    setLikes(likes + 1)
     try {
       await fetch('http://localhost:8000/api/dishcuss/updateDishcussing', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ id, likes: newLikes }),
+        body: JSON.stringify({ id, likes: likes + 1 }),
       });
     } catch (error) {
       console.error('Error updating likes:', error);
     }
   };
-
   const updateComments = async (username, theText) => {
     setComments(comments + 1)
     if (username && theText) {
@@ -140,15 +136,9 @@ const Dishcussing = ({ id, title, content, user, datetime, tag, likes, comments 
             <p>{comments}</p>
           </div>
           <CommentPopup show={showPopup} onClose={togglePopup} onSubmit={handleSubmit} />
-          <div className='flex flex-row items-center'>
-            <button
-              onClick={() => updateLikes()}
-              className={`p-2 rounded-full transition-colors duration-300 
-                ${liked ? "bg-red-100 text-red-500" : "bg-gray-100 text-gray-500"}`}
-            >
-              {liked ? "❤️" : "🖤"}
-            </button>
-            <p className='ml-4'>{likes}</p>
+          <div className='flex flex-row'>
+            <img src="img/like.png" className='size-8 mr-4' alt="" onClick={() => updateLikes()} />
+            <p>{likes}</p>
           </div>
           <img src="img/trash.svg" className="size-8 mr-4" onClick={() => deleting()} />
         </div>
